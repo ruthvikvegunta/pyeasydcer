@@ -2,9 +2,11 @@ import subprocess
 import os
 import glob
 import shutil
-        
+from .basicChecks import bcolors
+            
 def exportContent(ids, entity_type, landoEnv = False):
     failedArray = []
+    print(f'\n')
     for id in ids:
         if landoEnv:
             dcerCommand = 'lando drush dcer ' + entity_type + ' ' + id 
@@ -12,12 +14,12 @@ def exportContent(ids, entity_type, landoEnv = False):
             dcerCommand = 'drush dcer ' + entity_type + ' ' + id + ' --folder=/tmp/pyeasydcer_exports/'
         exportContent = subprocess.run(dcerCommand, shell=True, capture_output=True)
         if exportContent.returncode == 0:
-            print('Successfully exported default content for a ' + entity_type + ' with id: ' + id)
+            print(f'{bcolors.OKGREEN}Successfully exported default content for a {entity_type} with id: {id}{bcolors.ENDC}')
         else:
             failedArray.append(id)
     if len(failedArray) is not 0:
-        print('\nExport failed for the given id\'s: ' + str(failedArray) + '\n')
-        print('\nRebuilding cache and trying again for the failed id\'s\n')
+        print(f'\n{bcolors.FAIL}{bcolors.BOLD}Export failed for the given id\'s: {str(failedArray)}{bcolors.ENDC}\n')
+        print(f'\n{bcolors.WARNING}Rebuilding cache and trying again for the failed id\'s{bcolors.ENDC}\n')
         if landoEnv:
             cacheRebuild = subprocess.run(['lando', 'drush', 'cr'], capture_output=True)
         else:
@@ -30,13 +32,14 @@ def exportContent(ids, entity_type, landoEnv = False):
                     dcerCommand = 'drush dcer ' + entity_type + ' ' + id + ' --folder=/tmp/pyeasydcer_exports/'
                 exportContent = subprocess.run(dcerCommand, shell=True, capture_output=True)
                 if exportContent.returncode is 0:
-                    print('\nSuccessfully exported default content for a ' + entity_type + ' with id: ' + id)
+                    print(f'{bcolors.OKGREEN}Successfully exported default content for a {entity_type} with id: {id}{bcolors.ENDC}')
                 else:
-                    print('\nCannot find a ' + entity_type + ' with id: ' + id)
+                    print(f'{bcolors.FAIL}{bcolors.BOLD}Cannot find a {entity_type} with id: {id}{bcolors.ENDC}')
+            print(f'\n')
         else:
-            print('\nUnable to rebuild cache, looks like there is a problem in your Drupal Installation\n')
+            print(f'\n{bcolors.FAIL}{bcolors.BOLD}Unable to rebuild cache, looks like there is a problem in your Drupal Installation or your lando instance is not initiated\n{bcolors.ENDC}')
     else:
-        pass
+        print(f'\n')
     
 def appendEofAndMoveFiles(base_path, subscription, files, entity, landoEnv = False):
     for cur_file in files:
@@ -64,7 +67,8 @@ def appendEofAndMoveFiles(base_path, subscription, files, entity, landoEnv = Fal
 
 def dcer(entity_type, ids, subscription, base_path, landoEnv = False):
     if landoEnv:
-        with open('available_entities.txt') as cur_entity:
+        available_entities_config_file = os.path.join(os.environ["HOME"], '.pydcer_config/available_entities.txt')
+        with open(available_entities_config_file) as cur_entity:
             available_entities = cur_entity.read().splitlines()
         os.chdir(base_path + subscription + '/app/profiles/' + subscription + '_profile')
         exportContent(ids, entity_type, landoEnv=True)
@@ -87,5 +91,3 @@ def dcer(entity_type, ids, subscription, base_path, landoEnv = False):
                 filesExported = glob.glob(foldername + '*.json')
                 appendEofAndMoveFiles(base_path, subscription ,filesExported, name)
             shutil.rmtree('/tmp/pyeasydcer_exports')
-        else:
-            print('')
