@@ -55,9 +55,9 @@ class checkConfig:
                     path += item + os.sep
         """
         path = '/'
-        for item in default_path.split(os.sep):
+        for item in default_path.split('/'):
             if item != "":
-                path += item + os.sep
+                path += item + '/'
         pydcer_saved_config = OrderedDict()
         pydcer_saved_config["subscription"] = subscription_name
         pydcer_saved_config["path"] = path
