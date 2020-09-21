@@ -31,7 +31,7 @@ Python Script which makes exporting Drupal default content in Drupal a lot easie
 
 + You can directly install this script from pip as given below
 
-  + `pip3 install pyeasydcer==1.0.0`
+  + `pip3 install pyeasydcer`
 
 + If you are cloning the repository, then you need to run it as given below.
 
