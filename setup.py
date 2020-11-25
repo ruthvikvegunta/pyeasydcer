@@ -10,13 +10,13 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="pyeasydcer",
-    version="1.0.0",
+    version="1.3.0",
     description="Easy way to import default content in Drupal 8 using python",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/ruthvikvegunta/pyeasydcer/",
     author="Ruthvik Vegunta",
-    author_email="ruthvikv@icloud.com",
+    author_email="ruthvikv@icloud.com, ruthvikvegunta2@gmail.com",
     keywords=["Drupal", "Default Content", "dcer", "easydcer"],
     license="MIT",
     classifiers=[

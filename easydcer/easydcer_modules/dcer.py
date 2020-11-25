@@ -17,21 +17,21 @@ def exportContent(ids, entity_type, landoEnv = False):
             print(f'{bcolors.OKGREEN}Successfully exported default content for a {entity_type} with id: {id}{bcolors.ENDC}')
         else:
             failedArray.append(id)
-    if len(failedArray) is not 0:
+    if not len(failedArray) == 0:
         print(f'\n{bcolors.FAIL}{bcolors.BOLD}Export failed for the given id\'s: {str(failedArray)}{bcolors.ENDC}\n')
         print(f'\n{bcolors.WARNING}Rebuilding cache and trying again for the failed id\'s{bcolors.ENDC}\n')
         if landoEnv:
             cacheRebuild = subprocess.run(['lando', 'drush', 'cr'], capture_output=True)
         else:
-            cacheRebuild = subprocess.run(['drush', 'cr'], capture_output=True)
-        if cacheRebuild.returncode is 0:
+            cacheRebuild = subprocess.run(['drush', 'cr'], shell=True, capture_output=True)
+        if cacheRebuild.returncode == 0:
             for id in failedArray:
                 if landoEnv:
                     dcerCommand = 'lando drush dcer ' + entity_type + ' ' + id 
                 else:
                     dcerCommand = 'drush dcer ' + entity_type + ' ' + id + ' --folder=/tmp/pyeasydcer_exports/'
                 exportContent = subprocess.run(dcerCommand, shell=True, capture_output=True)
-                if exportContent.returncode is 0:
+                if exportContent.returncode == 0:
                     print(f'{bcolors.OKGREEN}Successfully exported default content for a {entity_type} with id: {id}{bcolors.ENDC}')
                 else:
                     print(f'{bcolors.FAIL}{bcolors.BOLD}Cannot find a {entity_type} with id: {id}{bcolors.ENDC}')
@@ -83,11 +83,11 @@ def dcer(entity_type, ids, subscription, base_path, landoEnv = False):
     else:
         os.chdir(base_path + subscription + '/app/profiles/' + subscription + '_profile')
         exportContent(ids, entity_type)
-        folderToCheck = [folder for folder in os.listdir('/tmp/pyeasydcer_exports/') if os.path.isdir('/tmp/pyeasydcer_exports/' + folder) and not os.listdir('/tmp/pyeasydcer_exports/' + folder) == []]
-        if folderToCheck:
-            moveFlag = True
-            for name in folderToCheck:
-                foldername = '/tmp/pyeasydcer_exports/' + name + '/'
-                filesExported = glob.glob(foldername + '*.json')
-                appendEofAndMoveFiles(base_path, subscription ,filesExported, name)
-            shutil.rmtree('/tmp/pyeasydcer_exports')
+        if(os.path.isdir('/tmp/pyeasydcer_exports')):
+            folderToCheck = [folder for folder in os.listdir('/tmp/pyeasydcer_exports/') if os.path.isdir('/tmp/pyeasydcer_exports/' + folder) and not os.listdir('/tmp/pyeasydcer_exports/' + folder) == []]
+            if folderToCheck:
+                for name in folderToCheck:
+                    foldername = '/tmp/pyeasydcer_exports/' + name + '/'
+                    filesExported = glob.glob(foldername + '*.json')
+                    appendEofAndMoveFiles(base_path, subscription ,filesExported, name)
+                shutil.rmtree('/tmp/pyeasydcer_exports')
