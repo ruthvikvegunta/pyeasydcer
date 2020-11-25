@@ -42,7 +42,6 @@ class checkConfig:
     def forceConfigChange(self):
         subscription_name = input("\nPlease enter the subscription name:  ")
         default_path = input("\nPlease enter the path for the default directory where you have all your clones:  ")
-        """
         if os.name == "posix":
             path = os.sep
             for item in default_path.split(os.sep):
@@ -50,14 +49,12 @@ class checkConfig:
                     path += item + os.sep
         elif os.name == "nt":
             path = os.sep
-            for item in default_path.split(os.sep):
-                if item != "":
+            items = default_path.split('/')
+            for item in items:
+                if item != "" and items.index(item) != 1:
                     path += item + os.sep
-        """
-        path = '/'
-        for item in default_path.split('/'):
-            if item != "":
-                path += item + '/'
+            path = items[1] + ":" + path
+        print(path)
         pydcer_saved_config = OrderedDict()
         pydcer_saved_config["subscription"] = subscription_name
         pydcer_saved_config["path"] = path

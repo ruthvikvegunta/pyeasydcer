@@ -23,7 +23,7 @@ def usage():
     print(f"\t{bcolors.WARNING}-config   View the config stored by the script {bcolors.ENDC}\n")
 
 
-def configCheck():
+def configCheck(ask = False):
     try:
         local_config_file = os.path.join(
             os.environ["HOME"], ".pydcer_config/pydcer_settings.json"
@@ -37,12 +37,14 @@ def configCheck():
             )
             current_time = datetime.now()
             difference_in_time = (current_time - config_saved_time).seconds
-
-            print(f"\n{bcolors.OKGREEN}{bcolors.BOLD}Found a config already saved, This is the config script will use::\n\nSubscription: {subscription}\nbase_path: {base_path}\nConfig save time: {str(config_saved_time)}{bcolors.ENDC}")
-            if difference_in_time >= 21600:
-                print(f"\n{bcolors.WARNING}Saved config is more than an hour old, so the script will again \nask you to the change the config when you run the script, \nor you can use '-force' argument to change the config whenever you need{bcolors.ENDC}\n")
-            else:
-                print(f"\n{bcolors.WARNING}If you want to change the config, Please use '-force' argument \nwhen you run the script so you can change the config when ever you want!!{bcolors.ENDC}\n")
+            print(f"\n{bcolors.WARNING}*********************************{bcolors.ENDC}")
+            print(f"\n{bcolors.OKGREEN}{bcolors.BOLD}Found a saved config::\n\nSubscription: {subscription}\nBase path: {base_path}\nConfig save time: {str(config_saved_time)}{bcolors.ENDC}")
+            if(ask):
+                if difference_in_time >= 21600:
+                    print(f"\n{bcolors.WARNING}Saved config is more than 6 hours old, so the script will again \nask you to the change the config when you run the script, \nor you can use '-force' argument to change the config whenever you need{bcolors.ENDC}\n")
+                else:
+                    print(f"\n{bcolors.WARNING}If you want to change the config, Please use '-force' argument \nWhen you run the script so you can change the config when ever you want!!\nScript saves settings whenever new config is given and user will only be asked after 6 hours{bcolors.ENDC}")
+            print(f"\n{bcolors.WARNING}*********************************{bcolors.ENDC}\n")
     except FileNotFoundError:
         print(f"\n{bcolors.FAIL}{bcolors.BOLD}Cannot find a saved config file, Please continue with running the script normally \nand the script will create a config file for you{bcolors.ENDC}\n")
 
@@ -72,12 +74,12 @@ def getAvailEntities():
 
 def main():
     global subscription, base_path, entity_type
-    if len(sys.argv) is 2:
+    if len(sys.argv) == 2:
         if "-help" in sys.argv or "-h" in sys.argv:
             usage()
             sys.exit(1)
         elif "-config" in sys.argv:
-            configCheck()
+            configCheck(True)
             sys.exit(1)
         elif "-force" in sys.argv:
             forceChangeConfig()
@@ -88,6 +90,7 @@ def main():
             pydcerConfig = config.checkConfig("force_change")
             sys.argv.remove("-force")
         else:
+            configCheck()
             pydcerConfig = config.checkConfig()
 
         pydcer_saved_config = pydcerConfig.getInfo()
