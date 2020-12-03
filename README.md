@@ -92,6 +92,7 @@ pyeasydcer is a python script which aims at automating the default content expor
 
 - What is happening in the above case is, pyeasydcer found a saved config file, so it is reusing the same subscription for this export and user wants to export nodes from id 1-10
 	- pyeasydcer tries to export and when default content is not exported for an id, pyeasydcer clears the drupal cache for that site and tries again, if it fails again that means that an entity with that particualr ID does not exist
+	- In the above image default content for node 1,2,3 are successfully exported, but for node 4-10 export has failed, so pyeasydcer tries to clear the drupal cache for this subscription and then tries to export the default content for failed ID's
 - **This is what is depicted in the above image**
 
 #### Use case 5
@@ -106,7 +107,7 @@ pyeasydcer is a python script which aims at automating the default content expor
 
 ![1d76f7fc0d0996dc82eba411bf771449.png](images/6d2f2ea9cc96423a98d7ae3026bb8c9b.png)
 
-- What is happening in the above case is, pyeasydcer is forced tp ask the user for config
+- What is happening in the above case is, pyeasydcer is forced to ask the user for config
 	- When ever `-force` argument is used, pyeasydcer does not look into the saved config at all
 - **This is what is depicted in the above image**
 ---
