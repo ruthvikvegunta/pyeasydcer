@@ -1,5 +1,9 @@
 # pyeasydcer
 
+[![Downloads](https://static.pepy.tech/personalized-badge/pyeasydcer?period=total&units=none&left_color=grey&right_color=blue&left_text=Total%20Downloads)](https://pepy.tech/project/pyeasydcer)
+[![Downloads](https://pepy.tech/badge/pyeasydcer/month)](https://pepy.tech/project/pyeasydcer)
+[![Downloads](https://pepy.tech/badge/pyeasydcer/week)](https://pepy.tech/project/pyeasydcer)
+
 pyeasydcer is a python script which aims at automating the default content export in drupal, thus saving users time and frustration
 
   - Supports all *NIX Operating Systems and Windows as well
