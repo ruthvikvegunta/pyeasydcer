@@ -38,18 +38,18 @@ def checkForDrush():
 
 
 def basicChecks():
-    print(f"\n{bcolors.WARNING}*********************************{bcolors.ENDC}")
-    print(f"\n{bcolors.WARNING}{bcolors.BOLD}Doing Initial checks{bcolors.ENDC}\n")
+    print(f"\n{bcolors.WARNING}#######################{bcolors.ENDC}")
+    print(f"\n{bcolors.WARNING}{bcolors.BOLD} Doing Initial checks {bcolors.ENDC}\n")
     python_check = checkForPython()
-    print(f"{bcolors.WARNING}OS Type : {sys.platform}{bcolors.ENDC}")
-    print(f"{bcolors.WARNING}Python3 Check : {str(python_check)}{bcolors.ENDC}")
+    print(f"{bcolors.WARNING} OS Type : {sys.platform}{bcolors.ENDC}")
+    print(f"{bcolors.WARNING} Python3 Check : {str(python_check)}{bcolors.ENDC}")
     if "lando" in sys.argv:
         drush_check = checkForLando()
-        print(f"{bcolors.WARNING}Lando Check : {str(drush_check)}{bcolors.ENDC}")
+        print(f"{bcolors.WARNING} Lando Check : {str(drush_check)}{bcolors.ENDC}")
     else:
         drush_check = checkForDrush()
-        print(f"{bcolors.WARNING}Drush Check : {str(drush_check)}{bcolors.ENDC}")
-    print(f"\n{bcolors.WARNING}*********************************{bcolors.ENDC}\n")
+        print(f"{bcolors.WARNING} Drush Check : {str(drush_check)}{bcolors.ENDC}")
+    print(f"\n{bcolors.WARNING}#######################{bcolors.ENDC}\n")
     if python_check and drush_check:
         return True
     else:

@@ -30,8 +30,8 @@ class checkConfig:
                     config_saved_time = datetime.strptime(
                         pydcer_saved_config["time_stamp"], "%c"
                     )
-                    difference_in_time = (current_time - config_saved_time).seconds
-                    if difference_in_time >= 21600:
+                    difference_in_time = (current_time - config_saved_time)
+                    if (difference_in_time.seconds + difference_in_time.days * 86400) >= 21600:
                         print(f'\n{bcolors.FAIL}{bcolors.BOLD}Look\'s like the stored config is 6 hour\'s old, so Please enter the below information{bcolors.ENDC}')
                         return self.forceConfigChange()
                     else:
@@ -42,6 +42,7 @@ class checkConfig:
     def forceConfigChange(self):
         subscription_name = input("\nPlease enter the subscription name:  ")
         default_path = input("\nPlease enter the path for the default directory where you have all your clones:  ")
+
         if os.name == "posix":
             path = os.sep
             for item in default_path.split(os.sep):
@@ -54,7 +55,7 @@ class checkConfig:
                 if item != "" and items.index(item) != 1:
                     path += item + os.sep
             path = items[1] + ":" + path
-        print(path)
+            
         pydcer_saved_config = OrderedDict()
         pydcer_saved_config["subscription"] = subscription_name
         pydcer_saved_config["path"] = path

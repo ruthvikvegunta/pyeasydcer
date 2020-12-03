@@ -14,7 +14,10 @@ def exportContent(ids, entity_type, landoEnv = False):
             dcerCommand = 'drush dcer ' + entity_type + ' ' + id + ' --folder=/tmp/pyeasydcer_exports/'
         exportContent = subprocess.run(dcerCommand, shell=True, capture_output=True)
         if exportContent.returncode == 0:
-            print(f'{bcolors.OKGREEN}Successfully exported default content for a {entity_type} with id: {id}{bcolors.ENDC}')
+            if id == '-y':
+                print(f'{bcolors.OKGREEN}Successfully exported default content for all existing {entity_type}{bcolors.ENDC}')
+            else:
+                print(f'{bcolors.OKGREEN}Successfully exported default content for a {entity_type} with id: {id}{bcolors.ENDC}')
         else:
             failedArray.append(id)
     if not len(failedArray) == 0:
@@ -70,7 +73,11 @@ def dcer(entity_type, ids, subscription, base_path, landoEnv = False):
         available_entities_config_file = os.path.join(os.environ["HOME"], '.pydcer_config/available_entities.txt')
         with open(available_entities_config_file) as cur_entity:
             available_entities = cur_entity.read().splitlines()
-        os.chdir(base_path + subscription + '/app/profiles/' + subscription + '_profile')
+        new_path = base_path + subscription + '/app/profiles/' + subscription + '_profile'
+        if os.name == "nt":
+            os.chdir(new_path.replace('/', os.sep))
+        else:
+            os.chdir(new_path)
         exportContent(ids, entity_type, landoEnv=True)
         app_path = base_path + subscription + '/app/'
         for cur_entity in available_entities:
@@ -81,7 +88,11 @@ def dcer(entity_type, ids, subscription, base_path, landoEnv = False):
             elif os.path.isdir(app_path + cur_entity) and os.listdir(app_path + cur_entity) == []:
                 shutil.rmtree(app_path + cur_entity)
     else:
-        os.chdir(base_path + subscription + '/app/profiles/' + subscription + '_profile')
+        new_path = base_path + subscription + '/app/profiles/' + subscription + '_profile'
+        if os.name == "nt":
+            os.chdir(new_path.replace('/', os.sep))
+        else:
+            os.chdir(new_path)
         exportContent(ids, entity_type)
         if(os.path.isdir('/tmp/pyeasydcer_exports')):
             folderToCheck = [folder for folder in os.listdir('/tmp/pyeasydcer_exports/') if os.path.isdir('/tmp/pyeasydcer_exports/' + folder) and not os.listdir('/tmp/pyeasydcer_exports/' + folder) == []]
