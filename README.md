@@ -17,6 +17,7 @@ pyeasydcer is a python script which aims at automating the default content expor
 #### Requirements
 + Python v3.7+
 + pip3
++ drush
 ---
 #### Brief Usage:
   + `pyeasydcer <entity_type> <id's of entities separated by a comma(,)>`
