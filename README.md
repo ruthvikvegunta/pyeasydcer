@@ -13,6 +13,8 @@ pyeasydcer is a python script which aims at automating the default content expor
 + User need not enter subscription name and path where local setup is located every time they use the script
 + User entered config is stored in a JSON file locally
     + For the next 6 hours script will not ask user to input subscription or path making user's work a bit more easy
++ pyeasydcer automatically adds a new line at the end for all the exported JSON's
++ pyeasydcer also places the exported content in the respective path, it does everything for the user. User just needs to push the changes after running the script
 ---
 #### Requirements
 + Python v3.7+
