@@ -111,7 +111,21 @@ pyeasydcer is a python script which aims at automating the default content expor
 	- When ever `-force` argument is used, pyeasydcer does not look into the saved config at all
 - **This is what is depicted in the above image**
 ---
-### NOTE:
+### Supported Entities
+- pyeasydcer supports these entities by default
+	```
+	block_content
+	node
+	menu_link_content
+	file
+	config_pages
+	taxonomy_term
+	paragraphs
+	user
+	```
+- If user needs some other entity which is not mentioned in the above list, they can manually add that entity in this file (`~/.pydcer_config/available_entities.txt`)
+---
+### Note
 
 - While giving path in a windows system, please use the path which gitbash shows, gitbash is like a mini linux virtual env for Windows, gitbash can run all UNIX commands and it uses UNIX conventions
 
